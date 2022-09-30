@@ -1,0 +1,7 @@
+<mvc:View controllerName="com.esless.cotcopassessment.controller.App"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:fb="sap.ui.comp.filterbar" xmlns:l="sap.ui.layout"
+	xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:object="sap.uxap"
+	xmlns:f="sap.ui.layout.form">
+	<App id="app">
+	</App>
+</mvc:View>

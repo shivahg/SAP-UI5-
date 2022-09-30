@@ -1,0 +1,24 @@
+<core:FragmentDefinition xmlns="sap.m"
+	xmlns:core="sap.ui.core" xmlns:sf="sap.ui.layout.form"
+	busyIndicatorDelay="0">
+	<ColumnListItem type="Navigation">
+		<cells>
+			<Text text="{oPageModel>RefNo}"></Text>
+			<Text text="{oPageModel>Name} ({oPageModel>Pernr})"></Text>
+			<Text text="{oPageModel>R1Name}"></Text>
+			<Text text="{oPageModel>Desg}"></Text>
+			<Text text="{oPageModel>Dept}"></Text>
+			<Text text="{oPageModel>StatusDesc}"></Text>
+			<HBox alignItems="Center" justifyContent="Center">
+				<Button icon="sap-icon://create-form" text="Fill Form"
+					tooltip="Fill Form" type="Emphasized" class="sapUiTinyMarginEnd"
+					visible="{= ${oPageModel>Status} === 'A' &amp;&amp; ${oPageModel>Returned} === ''}"
+					press="onPressCreateForm"></Button>
+				<Button icon="sap-icon://edit" text="Edit Form" tooltip="Edit Form"
+					type="Emphasized" class="sapUiTinyMarginEnd"
+					visible="{= ${oPageModel>Status} === 'A' &amp;&amp; ${oPageModel>Returned} !== '' &amp;&amp; ${oPageModel>monthsFlag} === 'X'}"
+					press="onPressEditForm"></Button>
+			</HBox>
+		</cells>
+	</ColumnListItem>
+</core:FragmentDefinition>

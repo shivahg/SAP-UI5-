@@ -1,0 +1,420 @@
+f <mvc:View controllerName="com.esless.cotcopassessment.controller.SelfAssessment"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:fb="sap.ui.comp.filterbar" xmlns:l="sap.ui.layout"
+	xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:object="sap.uxap"
+	xmlns:f="sap.ui.layout.form" xmlns:tnt="sap.tnt">
+	<Page id="page" title="Self Assessment Form (COT/COP) {oPageModel>/loginMode}"
+		class="sapUiSizeCompact" busy="{oPageModel>/busy}" busyIndicatorDelay="0">
+		<content>
+			<f:SimpleForm editable="true" layout="ResponsiveGridLayout"
+				labelSpanXL="4" labelSpanL="4" labelSpanM="5" labelSpanS="5"
+				adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0"
+				emptySpanS="0" columnsXL="3" columnsL="3" columnsM="3"
+				singleContainerFullSize="false" class="sapUiSizeCompact coreTitleHidden">
+				<f:content>
+					<core:Title text="" />
+					<Label design="Bold" text="Name" />
+					<Text text="{oPageModel>/hdrData/Name}"></Text>
+					<Label design="Bold" text="Employee ID" />
+					<Text text="{oPageModel>/hdrData/Pernr}"></Text>
+					<Label design="Bold" text="Joining Date" />
+					<Text
+						text="{path:'oPageModel>/hdrData/JoinDate',
+					type:'sap.ui.model.type.Date',
+						formatOptions: {
+				          pattern: 'dd-MM-yyyy'
+				        }}"></Text>
+					<core:Title text="" />
+					<Label design="Bold" text="Department" />
+					<Text text="{oPageModel>/hdrData/Dept}"></Text>
+					<Label design="Bold" text="Designation" />
+					<Text text="{oPageModel>/hdrData/Desg}"></Text>
+					<Label design="Bold" text="Probation / Confirmation Date" />
+					<Text
+						text="{path:'oPageModel>/hdrData/ConfDate',
+					type:'sap.ui.model.type.Date',
+					formatOptions: {
+				          pattern: 'dd-MM-yyyy'
+				        }}"></Text>
+					<core:Title text="" />
+					<Label design="Bold" text="Grade" />
+					<Text text="{oPageModel>/hdrData/Sgrp}"></Text>
+					<Label design="Bold" text="Reporting Manager" />
+					<Text text="{oPageModel>/hdrData/R1Approver}" visible="false"></Text>
+					<Label design="Bold" text="SBU" />
+					<Text text="{oPageModel>/hdrData/Sbu}"></Text>
+					<Label design="Bold" text="Current Profile" />
+					<!-- <Text text="{oPageModel>/hdrData/Profile}"></Text> -->
+					<Input maxLength="40" value="{oPageModel>/hdrData/Profile}"
+						enabled="{= ${oPageModel>/hdrData/navMode} ==='C' || (${oPageModel>/hdrData/navMode} ==='E' &amp;&amp; ${oPageModel>/hdrData/Returned} ==='X')}"></Input>
+				</f:content>
+			</f:SimpleForm>
+			<MessageStrip type="Warning" enableFormattedText="true"
+				text="{i18n>twoCriticalAssignments}" showIcon="false"
+				showCloseButton="false" class="sapUiTinyMarginTop">
+			</MessageStrip>
+			<Table id="ID_TBL_ASGNMT" mode="None" growingScrollToLoad="true"
+				items="{path:'oPageModel>/oAsgnmtAchvmtItems',
+				filters:[{
+            			path: 'Ind',
+            			operator: 'EQ',
+            			value1: '1'
+        	}]}"
+				updateFinished="onUpdateFinishedAsgnmt"><!-- items="{oPageModel>/tableItems}" -->
+				<columns>
+					<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true"
+						width="50%">
+						<header>
+							<Label design="Bold" text="Assignments" wrapping="true"
+								required="true" />
+						</header>
+						<footer>
+							<Label design="Bold" text="Total Score" wrapping="true" />
+						</footer>
+					</Column>
+					<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true">
+						<header>
+							<Label design="Bold" text="Max" wrapping="true" required="true" />
+						</header>
+						<footer>
+							<Label design="Bold" text="{oPageModel>/totalAsgnmt1}"
+								wrapping="true" />
+						</footer>
+					</Column>
+					<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true">
+						<header>
+							<Label design="Bold" text="Score" wrapping="true" required="true" />
+						</header>
+						<footer>
+							<Label design="Bold" text="{oPageModel>/totalAsgnmt2}"
+								wrapping="true" />
+						</footer>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<TextArea maxLength="100" value="{oPageModel>F1}" width="100%"
+								enabled="{= ${oPageModel>/hdrData/navMode} ==='C' || (${oPageModel>/hdrData/navMode} ==='E' &amp;&amp; ${oPageModel>/hdrData/Returned} ==='X')}" />
+							<Input maxLength="100" value="{oPageModel>F2}" type="Number"
+								change="onChangeRatingAsgnmt" editable="false"
+								enabled="{= ${oPageModel>/hdrData/navMode} ==='C' || (${oPageModel>/hdrData/navMode} ==='E' &amp;&amp; ${oPageModel>/hdrData/Returned} ==='X')}" />
+							<Input maxLength="100" value="{oPageModel>F3}" type="Number"
+								change="onChangeRatingAsgnmt"
+								enabled="{= ${oPageModel>/hdrData/navMode} ==='C' || (${oPageModel>/hdrData/navMode} ==='E' &amp;&amp; ${oPageModel>/hdrData/Returned} ==='X')}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+			<MessageStrip type="Warning" enableFormattedText="true"
+				text="{i18n>twoAchievementsInitaitives}" showIcon="false"
+				showCloseButton="false" class="sapUiTinyMarginTop">
+			</MessageStrip>
+			<Table id="ID_TBL_ACHMT" mode="None" growingScrollToLoad="true"
+				items="{path:'oPageModel>/oAsgnmtAchvmtItems',
+				filters:[{
+            			path: 'Ind',
+            			operator: 'EQ',
+            			value1: '2'
+        	}]}"
+				updateFinished="onUpdateFinishedAchmt"><!-- items="{oPageModel>/tableItems}" -->
+				<columns>
+					<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true"
+						width="50%">
+						<header>
+							<Label design="Bold" text="Achievements" wrapping="true"
+								required="true" />
+						</header>
+						<footer>
+							<Label design="Bold" text="Total Score" wrapping="true" />
+						</footer>
+					</Column>
+					<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true">
+						<header>
+							<Label design="Bold" text="Max" wrapping="true" required="true" />
+						</header>
+						<footer>
+							<Label design="Bold" text="{oPageModel>/totalAchmt1}"
+								wrapping="true" />
+						</footer>
+					</Column>
+					<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true">
+						<header>
+							<Label design="Bold" text="Score" wrapping="true" required="true" />
+						</header>
+						<footer>
+							<Label design="Bold" text="{oPageModel>/totalAchmt2}"
+								wrapping="true" />
+						</footer>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<TextArea maxLength="100" value="{oPageModel>F1}" width="100%"
+								enabled="{= ${oPageModel>/hdrData/navMode} ==='C' || (${oPageModel>/hdrData/navMode} ==='E' &amp;&amp; ${oPageModel>/hdrData/Returned} ==='X')}" />
+							<Input maxLength="100" value="{oPageModel>F2}" type="Number"
+								change="onChangeRatingAchmt" editable="false"
+								enabled="{= ${oPageModel>/hdrData/navMode} ==='C' || (${oPageModel>/hdrData/navMode} ==='E' &amp;&amp; ${oPageModel>/hdrData/Returned} ==='X')}" />
+							<Input maxLength="100" value="{oPageModel>F3}" type="Number"
+								change="onChangeRatingAchmt"
+								enabled="{= ${oPageModel>/hdrData/navMode} ==='C' || (${oPageModel>/hdrData/navMode} ==='E' &amp;&amp; ${oPageModel>/hdrData/Returned} ==='X')}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+			<MessageStrip type="Warning" enableFormattedText="true"
+				text="{i18n>areaOfImprovementWR}" showIcon="false" showCloseButton="false"
+				class="sapUiTinyMarginTop">
+			</MessageStrip>
+			<Table id="ID_TBL_IMPR_AREA" mode="None" growingScrollToLoad="true"
+				items="{path:'oPageModel>/oAsgnmtAchvmtItems',
+				filters:[{
+            			path: 'Ind',
+            			operator: 'EQ',
+            			value1: '3'
+        	}]}"><!-- items="{oPageModel>/tableItems}" -->
+				<columns>
+					<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true"
+						width="50%">
+						<Label design="Bold" text="Improvements" wrapping="true"
+							required="true" />
+					</Column>
+					<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true">
+						<Label design="Bold" text="Remarks" wrapping="true"
+							required="true" />
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<TextArea maxLength="100" value="{oPageModel>F1}" width="100%"
+								enabled="{= ${oPageModel>/hdrData/navMode} ==='C' || (${oPageModel>/hdrData/navMode} ==='E' &amp;&amp; ${oPageModel>/hdrData/Returned} ==='X')}" />
+							<TextArea maxLength="100" value="{oPageModel>F2}" width="100%"
+								enabled="{= ${oPageModel>/hdrData/navMode} ==='C' || (${oPageModel>/hdrData/navMode} ==='E' &amp;&amp; ${oPageModel>/hdrData/Returned} ==='X')}" />
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+			<VBox visible="{= ${oPageModel>/hdrData/navMode} !=='C'}">
+				<HBox alignItems="Center" justifyContent="Center" class="sapUiSmallMarginTop"
+					width="100%">
+					<tnt:InfoLabel text="For R1 and HOD" renderMode="Loose"
+						colorScheme="3" displayOnly="true" width="15rem" />
+				</HBox>
+				<MessageStrip type="Warning" enableFormattedText="true"
+					text="{i18n>r1AndHODInfo}" showIcon="false" showCloseButton="false"
+					class="sapUiTinyMarginTop">
+				</MessageStrip>
+				<MessageStrip type="Warning" enableFormattedText="true"
+					text="{i18n>ratingLabel}" showIcon="false" showCloseButton="false"
+					class="sapUiTinyMarginTop">
+				</MessageStrip>
+				<Table id="ID_TBL_R1_HOD_RATING_A" mode="None"
+					growingScrollToLoad="true"
+					items="{
+				path:'oPageModel>/oRatingItems',
+				filters:[{
+					path:'Ind',
+					operator:'EQ',
+					value1:'1'
+				}]}"
+					updateFinished="onUpdateFinishedHodR1RatingA"><!-- items="{oPageModel>/tableItems}" -->
+					<headerToolbar>
+						<Toolbar>
+							<Label design="Bold" text="LOP During Training / Probation (Days):"
+								wrapping="true" required="true" />
+							<Input width="5rem" maxLength="3" value="{oPageMode>/hdrData/Lop}"
+								editable="false" type="Number" enabled="{= ${oPageModel>/loginMode} ==='R1'}"></Input>
+							<ToolbarSpacer></ToolbarSpacer>
+						</Toolbar>
+					</headerToolbar>
+					<columns>
+						<Column hAlign="Left" minScreenWidth="Phone" demandPopin="true"
+							width="50%">
+							<Label design="Bold" text="Part A" wrapping="true"
+								required="true" />
+							<footer>
+								<Label design="Bold" text="Total Sub Score" wrapping="true"
+									required="true" />
+							</footer>
+						</Column>
+						<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true">
+							<Label design="Bold" text="R1 Rating" wrapping="true"
+								required="true" />
+							<footer>
+								<Label design="Bold" text="{oPageModel>/totalHodR1A1}"
+									wrapping="true" />
+							</footer>
+						</Column>
+						<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true">
+							<Label design="Bold" text="HOD Rating" wrapping="true"
+								required="true" />
+							<footer>
+								<Label design="Bold" text="{oPageModel>/totalHodR1A2}"
+									wrapping="true" />
+							</footer>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem>
+							<cells>
+								<Text text="{oPageModel>Text}" />
+								<Input maxLength="1" value="{oPageModel>R1}" type="Number"
+									change="onChangeRatingA"
+									enabled="{= ${oPageModel>/hdrData/Status}==='B' &amp;&amp; ${oPageModel>/hdrData/Returned} !=='Y' &amp;&amp; ${oPageModel>/loginMode} ==='R1'}" />
+								<Input maxLength="1" value="{oPageModel>HOD}" type="Number"
+									change="onChangeRatingA"
+									enabled="{= ${oPageModel>/hdrData/Status}==='C' &amp;&amp; ${oPageModel>/hdrData/Returned} !=='Y' &amp;&amp; ${oPageModel>/loginMode} ==='HOD'}" />
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+				<Table id="ID_TBL_R1_HOD_RATING_B" mode="None"
+					growingScrollToLoad="true"
+					items="{
+				path:'oPageModel>/oRatingItems',
+				filters:[{
+					path:'Ind',
+					operator:'EQ',
+					value1:'2'
+				}]}"
+					updateFinished="onUpdateFinishedHodR1RatingB"><!-- items="{oPageModel>/tableItems}" -->
+					<columns>
+						<Column hAlign="Left" minScreenWidth="Phone" demandPopin="true"
+							width="50%">
+							<Label design="Bold" text="Part A" wrapping="true"
+								required="true" />
+							<footer>
+								<Label design="Bold" text="Total Sub Score" wrapping="true"
+									required="true" />
+							</footer>
+						</Column>
+						<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true">
+							<Label design="Bold" text="R1 Rating" wrapping="true"
+								required="true" />
+							<footer>
+								<Label design="Bold" text="{oPageModel>/totalHodR1B1}"
+									wrapping="true" />
+							</footer>
+						</Column>
+						<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true">
+							<Label design="Bold" text="HOD Rating" wrapping="true"
+								required="true" />
+							<footer>
+								<Label design="Bold" text="{oPageModel>/totalHodR1B2}"
+									wrapping="true" />
+							</footer>
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem>
+							<cells>
+								<Text text="{oPageModel>Text}" />
+								<Input maxLength="2" value="{oPageModel>R1}" type="Number"
+									change="onChangeRatingB"
+									enabled="{= ${oPageModel>/hdrData/Status}==='B' &amp;&amp; ${oPageModel>/hdrData/Returned} !=='Y' &amp;&amp; ${oPageModel>/loginMode} ==='R1'}" />
+								<Input maxLength="2" value="{oPageModel>HOD}" type="Number"
+									change="onChangeRatingB"
+									enabled="{= ${oPageModel>/hdrData/Status}==='C' &amp;&amp; ${oPageModel>/hdrData/Returned} !=='Y' &amp;&amp; ${oPageModel>/loginMode} ==='HOD'}" />
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+				<Table mode="None" growingScrollToLoad="true" class="sapUiTinyMarginBottom"><!-- items="{oPageModel>/tableItems}" -->
+					<columns>
+						<Column hAlign="Left" minScreenWidth="Phone" demandPopin="true"
+							width="50%">
+							<Label design="Bold" text="Total (Score Part A + Part B)"
+								wrapping="true" />
+						</Column>
+						<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true">
+							<Label design="Bold"
+								text="{= parseFloat(${oPageModel>/totalHodR1A1}) + parseFloat(${oPageModel>/totalHodR1B1})}"
+								wrapping="true" />
+						</Column>
+						<Column hAlign="Center" minScreenWidth="Phone" demandPopin="true">
+							<Label design="Bold"
+								text="{= parseFloat(${oPageModel>/totalHodR1A2}) + parseFloat(${oPageModel>/totalHodR1B2})}"
+								wrapping="true" />
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem visible="false"></ColumnListItem>
+					</items>
+				</Table>
+				<MessageStrip type="Warning" enableFormattedText="true"
+					text=" &lt;strong &gt;Performance Rating Scale: &lt;/strong&gt; Exceptional:91-100, Valued: 75-90, Consistent:56-74, Needs Improvement:55 and Below"
+					showIcon="false" showCloseButton="false" class="sapUiTinyMarginTop">
+				</MessageStrip>
+				<!-- <Toolbar> <Label design="Bold" text="Performance Rating:" wrapping="true" 
+					required="true" /> <Input width="5rem" maxLength="3" type="Number"></Input> 
+					<ToolbarSpacer></ToolbarSpacer> </Toolbar> <VBox class="sapUiTinyMargin"> 
+					<Label design="Bold" text="Reporting Manager Remarks:" wrapping="true" required="true" 
+					/> <TextArea width="100%"></TextArea> <Label design="Bold" text="HOD Remarks:" 
+					wrapping="true" required="true" /> <TextArea width="100%"></TextArea> </VBox> -->
+				<Table id="ID_TBL_PERFORM_RATING" mode="None"
+					growingScrollToLoad="true" items="{path:'oPageModel>/oPerformItems'}"><!-- items="{oPageModel>/tableItems}" -->
+					<columns>
+						<Column hAlign="Left" minScreenWidth="Phone" demandPopin="true">
+							<Label design="Bold" text="Employee Remarks" wrapping="true"
+								required="true" />
+						</Column>
+						<Column hAlign="Left" minScreenWidth="Phone" demandPopin="true">
+							<Label design="Bold" text="Reporting Manager Remarks"
+								wrapping="true" required="true" />
+						</Column>
+						<Column hAlign="Center" minScreenWidth="Tablet"
+							demandPopin="true">
+							<Label design="Bold" text="HOD Remarks" wrapping="true"
+								required="true" />
+						</Column>
+						<Column hAlign="Center" minScreenWidth="Tablet"
+							demandPopin="true">
+							<Label design="Bold" text="CPO Remarks" wrapping="true"
+								required="true" />
+						</Column>
+						<Column hAlign="Center" minScreenWidth="Tablet"
+							demandPopin="true">
+							<Label design="Bold" text="Performance Rating" wrapping="true"
+								required="true" />
+						</Column>
+					</columns>
+					<items>
+						<ColumnListItem>
+							<cells>
+								<TextArea maxLength="100" value="{oPageModel>EmpCmt}"
+									width="100%"
+									enabled="{= ${oPageModel>/hdrData/Status}==='A' &amp;&amp; ${oPageModel>/hdrData/navMode}==='E' &amp;&amp; parseInt(${oPageModel>Numb}) === ${oPageModel>/oPerformItems}.length}" />
+								<TextArea maxLength="100" value="{oPageModel>R1Cmt}"
+									width="100%"
+									enabled="{= ${oPageModel>/hdrData/Status}==='B' &amp;&amp; ${oPageModel>/loginMode} ==='R1' &amp;&amp; parseInt(${oPageModel>Numb}) === ${oPageModel>/oPerformItems}.length}" />
+								<TextArea maxLength="100" value="{oPageModel>HodCmt}"
+									width="100%"
+									enabled="{= ${oPageModel>/hdrData/Status}==='C' &amp;&amp; ${oPageModel>/loginMode} ==='HOD' &amp;&amp; parseInt(${oPageModel>Numb}) === ${oPageModel>/oPerformItems}.length}" />
+								<TextArea maxLength="100" value="{oPageModel>CpoCmt}"
+									width="100%"
+									enabled="{= ${oPageModel>/hdrData/Status}==='D' &amp;&amp; ${oPageModel>/loginMode} ==='CPO' &amp;&amp; parseInt(${oPageModel>Numb}) === ${oPageModel>/oPerformItems}.length}" />
+								<Input value="{oPageModel>Rating}" maxLength="3" type="Number"
+									width="5rem"
+									enabled="{= ${oPageModel>/hdrData/Status}==='D' &amp;&amp; ${oPageModel>/loginMode} ==='CPO' &amp;&amp; parseInt(${oPageModel>Numb}) === ${oPageModel>/oPerformItems}.length}" />
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+			</VBox>
+		</content>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer />
+				<Button text="Submit" type="Accept"
+					visible="{= ${oPageModel>/hdrData/navMode} !=='D'}" press="onPressSubmit"></Button>
+				<Button text="Approve" type="Accept" press="onPressApprove"
+					visible="{= ${oPageModel>/loginMode} ==='R1' || ${oPageModel>/loginMode} ==='HOD' || ${oPageModel>/loginMode} ==='CPO'}"></Button>
+				<Button text="Send Back" type="Emphasized" press="onPressSendBack"
+					visible="{= ${oPageModel>/loginMode} ==='R1' || ${oPageModel>/loginMode} ==='HOD' || ${oPageModel>/loginMode} ==='CPO'}"></Button>
+				<Button text="Extend" type="Reject" press="onPressExtend"
+					visible="{= ${oPageModel>/loginMode} ==='CPO'}"></Button>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>
